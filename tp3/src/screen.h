@@ -27,5 +27,9 @@ void screen_nombre(char nombre[]);
 void screen_navio_naming();
 void screen_modo_estado();
 
+void screen_modo_mapa();
+void screen_pintar_mar();
+void screen_pintar_tierra();
+void screen_pintar_relojes();
 
 #endif  /* !__SCREEN_H__ */
