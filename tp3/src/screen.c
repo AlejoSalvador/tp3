@@ -112,3 +112,55 @@ void screen_modo_estado()
 
 
 
+void screen_modo_mapa()
+{
+	screen_pintar_mar();
+	screen_pintar_tierra();
+	screen_pintar_relojes();
+
+}
+void screen_pintar_tierra()
+{
+	struct casillero *puntero= (casillero *)VIDEO_ADDR; 
+	struct casillero auxiliar = {.caracter = 205, .color= C_FG_GREEN+C_BG_GREEN};
+	for (int i=0;i<3;i++)
+	{
+		for (int j=0;j<VIDEO_COLS;j++)
+		{
+			*(puntero+ i*VIDEO_COLS+j)=auxiliar;		
+		}
+	}
+	for (int i=0;i<16;i++){
+		
+		*(puntero+ 3*VIDEO_COLS+i)=auxiliar;		
+	}
+
+
+}
+
+void screen_pintar_mar()
+{
+	struct casillero *puntero= (casillero *)VIDEO_ADDR; 
+	struct casillero auxiliar = {.caracter = 205, .color= C_FG_CYAN+C_BG_CYAN};
+	for (int i=16;i<VIDEO_COLS;i++){
+		
+		*(puntero+ 3*VIDEO_COLS+i)=auxiliar;		
+	}
+	for (int i=4;i<VIDEO_FILS-1;i++)
+	{
+		for (int j=0;j<VIDEO_COLS;j++)
+		{
+			*(puntero+ i*VIDEO_COLS+j)=auxiliar;		
+		}
+	}
+
+}
+void screen_pintar_relojes()
+{
+	struct casillero *puntero= (casillero *)VIDEO_ADDR; 
+	struct casillero auxiliar = {.caracter = 205, .color= C_FG_BLACK+C_BG_BLACK};
+	for (int j=0;j<VIDEO_COLS;j++)
+	{
+		*(puntero+ 79*VIDEO_COLS+j)=auxiliar;		
+	}
+}
