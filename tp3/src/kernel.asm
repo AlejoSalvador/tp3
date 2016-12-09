@@ -16,8 +16,8 @@ extern IDT_DESC
 extern idt_inicializar
 
 ;;salida
-extern screen_pintar_pantalla_1D
-
+extern screen_pintar_pantalla
+extern screen_modo_estado
 ;; PIC
 extern resetear_pic
 extern habilitar_pic
@@ -76,7 +76,7 @@ mp:
     mov esp, 0x27000
     mov ebp, 0x27000
     ; pintar pantalla, todos los colores, que bonito!
-    call screen_pintar_pantalla_1D
+    call screen_modo_estado
     ; inicializar el manejador de memoria
 
     ; inicializar el directorio de paginas

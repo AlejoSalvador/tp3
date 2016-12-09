@@ -23,8 +23,8 @@ typedef struct casillero
 
 void screen_pintar_pantalla();
 void screen_limpiar_pantalla();
-void screen_nombre(string s);
-void screen_fondo_blanco();
+void screen_nombre(char nombre[]);
+void screen_navio_naming();
 void screen_modo_estado();
 
 
