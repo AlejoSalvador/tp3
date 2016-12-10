@@ -70,13 +70,47 @@ ISR 19
 ;; Rutina de atención del RELOJ
 ;; -------------------------------------------------------------------------- ;;
 
+global _isr32
+
+_isr32:
+	pushad
+	xchg bx, bx
+	call fin_intr_pic1
+	call proximo_reloj
+	popad
+iret
+
 ;;
 ;; Rutina de atención del TECLADO
 ;; -------------------------------------------------------------------------- ;;
 
+global _isr33
+_isr33:
+	xchg bx, bx	
+	pushad
+	xchg bx, bx
+
+	popad
+iret
+
 ;;
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
+
+global _isr0x50
+_isr0x50:
+	pushad
+
+
+	popad
+iret
+
+global _isr0x66
+_isr0x66:
+	pushad
+
+	popad
+iret
 
 ;; Funciones Auxiliares
 ;; -------------------------------------------------------------------------- ;;

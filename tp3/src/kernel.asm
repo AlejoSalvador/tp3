@@ -18,11 +18,14 @@ extern idt_inicializar
 ;;salida
 extern screen_pintar_pantalla
 extern screen_modo_estado
+extern screen_modo_mapa
 ;; PIC
 extern resetear_pic
 extern habilitar_pic
 
-
+;;PAGINACION
+extern mmu_inicializar_kernel
+extern mmu_inicializar_dir_tarea
 ;; Saltear seccion de datos
 jmp start
 
@@ -77,14 +80,24 @@ mp:
     mov ebp, 0x27000
     ; pintar pantalla, todos los colores, que bonito!
     call screen_modo_estado
+
+    call screen_modo_mapa
+
     ; inicializar el manejador de memoria
 
     ; inicializar el directorio de paginas
-
+    call mmu_inicializar_kernel
     ; inicializar memoria de tareas
+
 
     ; habilitar paginacion
 
+    mov eax, 0x27000
+    mov cr3, eax
+    mov eax, cr0
+    or eax, 0x80000000
+    mov cr0, eax
+ call screen_modo_estado
     ; inicializar tarea idle
 
     ; inicializar todas las tsss
@@ -97,16 +110,31 @@ mp:
     lidt[IDT_DESC]
     call idt_inicializar
 
-    xchg bx, bx
+
+	call screen_modo_mapa
 
 
+	
     ; configurar controlador de interrupciones
 
     ; cargar la tarea inicial
 
-    ; saltar a la primer tarea
+	mov eax, 0x00100000	
 
+
+	
+	push eax
+	mov eax,1
+	push eax
+	call mmu_inicializar_dir_tarea
+	
+	
+    ; saltar a la primer tarea
+	call resetear_pic
+	call habilitar_pic
+	sti
     ; Ciclar infinitamente (por si algo sale mal...)
+	
     mov eax, 0xFFFF
     mov ebx, 0xFFFF
     mov ecx, 0xFFFF

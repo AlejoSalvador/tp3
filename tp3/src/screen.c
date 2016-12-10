@@ -76,7 +76,7 @@ void screen_navio_naming()
 
 				auxiliar.color = C_FG_LIGHT_GREY+C_BG_LIGHT_GREY;
 				*(puntero+ i*VIDEO_COLS+j+5)=auxiliar;
-				
+				auxiliar.color = C_FG_BLACK+C_BG_LIGHT_GREY;
 				auxiliar.caracter = '0'+1+ j/12 + 4*(i/7);
 				*(puntero+ i*VIDEO_COLS+j+6)=auxiliar;
 

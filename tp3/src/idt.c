@@ -72,9 +72,8 @@ void idt_inicializar() {
     IDT_INTR(17);
     IDT_INTR(18);
     IDT_INTR(19);
-
-  //  IDT_ENTRY(32);
-  //  IDT_ENTRY(33);
-  //  IDT_ENTRY(0x50);
-  //  IDT_ENTRY(0x66);
+    IDT_INTR(32);
+    IDT_INTR(33);
+    IDT_SYSTEM_CALL(0x50);
+    IDT_SYSTEM_CALL(0x66);
 }
