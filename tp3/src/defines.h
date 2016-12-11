@@ -31,7 +31,28 @@
 #define GDT_SEGMENTO_CODIGO_DE_SISTEMA 19
 #define GDT_SEGMENTO_DATOS_DE_USUARIO 20
 #define GDT_SEGMENTO_DATOS_DE_SISTEMA 21
-#define GDT_SEGMENTO_MEMORIA_DE_VIDEO 22   
+#define GDT_SEGMENTO_MEMORIA_DE_VIDEO 22
+   
+#define GDT_TAREA_INICIAL 23
+#define GDT_TAREA_IDLE 24
+
+#define GDT_TAREA_1 25
+#define GDT_TAREA_2 26
+#define GDT_TAREA_3 27
+#define GDT_TAREA_4 28
+#define GDT_TAREA_5 29
+#define GDT_TAREA_6 30
+#define GDT_TAREA_7 31
+#define GDT_TAREA_8 32
+
+#define GDT_TAREA_1_BANDERA 33
+#define GDT_TAREA_2_BANDERA 34
+#define GDT_TAREA_3_BANDERA 35
+#define GDT_TAREA_4_BANDERA 36
+#define GDT_TAREA_5_BANDERA 37
+#define GDT_TAREA_6_BANDERA 38
+#define GDT_TAREA_7_BANDERA 39
+#define GDT_TAREA_8_BANDERA 40
 
 /* Direcciones de memoria */
 /* -------------------------------------------------------------------------- */

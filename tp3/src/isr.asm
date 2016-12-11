@@ -11,6 +11,8 @@ BITS 32
 
 ;; PIC
 extern fin_intr_pic1
+;;IDT
+extern int_teclado
 
 
 ;;
@@ -26,6 +28,7 @@ msg%1_len: equ $ - msg%1_msg
 _isr%1:
 .loopear:
     ; To Infinity And Beyond!!
+xchg bx, bx
     mov eax, 0xFFF2
     mov ebx, 0xFFF2
     mov ecx, 0xFFF2
@@ -73,23 +76,29 @@ ISR 19
 global _isr32
 
 _isr32:
+	
 	pushad
-	xchg bx, bx
-	call fin_intr_pic1
 	call proximo_reloj
+	call fin_intr_pic1
 	popad
 iret
 
 ;;
 ;; Rutina de atención del TECLADO
 ;; -------------------------------------------------------------------------- ;;
-
+make
 global _isr33
 _isr33:
-	xchg bx, bx	
-	pushad
-	xchg bx, bx
 
+	pushad
+	
+	xor eax, eax
+	in al, 0x60
+	push eax
+	call int_teclado
+
+	pop eax
+	call fin_intr_pic1
 	popad
 iret
 
@@ -100,7 +109,7 @@ iret
 global _isr0x50
 _isr0x50:
 	pushad
-
+	mov eax, 0x42
 
 	popad
 iret
@@ -109,6 +118,8 @@ global _isr0x66
 _isr0x66:
 	pushad
 
+	mov eax, 0x42	
+
 	popad
 iret
 
@@ -116,9 +127,8 @@ iret
 ;; -------------------------------------------------------------------------- ;;
 proximo_reloj:
     pushad
-
     inc DWORD [reloj_numero]
-    mov ebx, [reloj]
+    mov ebx, [reloj_numero]
     cmp ebx, 0x4
     jl .ok
         mov DWORD [reloj_numero], 0x0

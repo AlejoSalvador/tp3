@@ -50,9 +50,10 @@ void mmu_inicializar_kernel()
 
 	for (int i=896; i < 1024;i++)
 	{
-		page_table_1[i]=0x00000000;
+		page_table_1[i]=0x00000002;
 	}
-
+	mmu_mapear_pagina(0x40000000,0x27000,0x20000, 0, 0);
+	tlbflush();
 
 }
 
@@ -76,7 +77,7 @@ void mmu_mapear_pagina(unsigned int virtual, unsigned int cr3, unsigned int fisi
 	{
 		// Tengo que crear la entrada y las tablas ??? REVISAR LO DE ABAJO
 		
-		*pd=proxima_pagina_libre_tierra()+0X000000001+user*4+rw*2;
+		*pd=proxima_pagina_libre_tierra()+0X00000001+user*4+rw*2;
 		pt=(unsigned int*) pagina_libre_tierra;
 		
 		int i;
@@ -139,10 +140,10 @@ unsigned int mmu_inicializar_dir_tarea(unsigned int number_task, unsigned int fi
 
 	mmu_mapear_pagina(0x40000000,dir_directory, fisica, 1, 1);
 	mmu_mapear_pagina(0x40001000,dir_directory, fisica+0x1000, 1, 1);
-	mmu_mapear_pagina(0x40002000,dir_directory, 0, 0, 1);
+	mmu_mapear_pagina(0x40002000,dir_directory, 0, 0, 1);//ancla
 
-	mmu_mapear_pagina(fisica, rcr3(), fisica, 1, 1);
-	mmu_mapear_pagina(fisica+0x1000, rcr3(), fisica+0x1000, 1, 1);
+	//mmu_mapear_pagina(fisica, rcr3(), fisica, 1, 1);
+	//mmu_mapear_pagina(fisica+0x1000, rcr3(), fisica+0x1000, 1, 1);
 
 	unsigned int* src=(unsigned int*) 0x8000+(0x2000)*number_task;
 	unsigned int* dst=(unsigned int*) fisica;
@@ -153,8 +154,8 @@ unsigned int mmu_inicializar_dir_tarea(unsigned int number_task, unsigned int fi
 		src++;
 	}
 
-	mmu_unmapear_pagina(fisica, rcr3());
-	mmu_unmapear_pagina(fisica+0x1000, rcr3());	
+	//mmu_unmapear_pagina(fisica, rcr3());
+	//mmu_unmapear_pagina(fisica+0x1000, rcr3());	
 
 	tlbflush();
 	return dir_directory;//devolver cr3

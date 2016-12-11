@@ -7,6 +7,8 @@
 
 #include "idt.h"
 #include "isr.h"
+#include "colors.h"
+#include "screen.h"
 
 idt_entry idt[255] = { };
 
@@ -14,6 +16,26 @@ idt_descriptor IDT_DESC = {
     sizeof(idt) - 1,
     (unsigned int) &idt
 };
+
+void int_teclado(int n)
+{
+	int tecla=n - 0x80;
+	if (tecla < 0x0C &&tecla>0x01)
+	{
+		int numero=tecla;
+		if (numero==0x0B) numero=1;
+		struct casillero *puntero= (casillero *)VIDEO_ADDR;
+	struct casillero auxiliar ={.caracter = numero+47, .color= C_FG_WHITE+C_BG_BLACK};
+			
+			*(puntero+79)=auxiliar;
+ 
+	}
+	if (tecla==0x12)
+		screen_modo_estado();
+
+	if (tecla==0x32)
+		screen_modo_mapa();
+}
 
 
 /*

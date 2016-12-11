@@ -15,6 +15,8 @@ extern GDT_DESC
 extern IDT_DESC
 extern idt_inicializar
 
+extern tss_inicializar
+
 ;;salida
 extern screen_pintar_pantalla
 extern screen_modo_estado
@@ -84,25 +86,26 @@ mp:
     call screen_modo_mapa
 
     ; inicializar el manejador de memoria
+    call mmu_inicializar_kernel
 
     ; inicializar el directorio de paginas
-    call mmu_inicializar_kernel
+    mov eax, 0x27000
+    mov cr3, eax
     ; inicializar memoria de tareas
 
 
     ; habilitar paginacion
-
-    mov eax, 0x27000
-    mov cr3, eax
     mov eax, cr0
     or eax, 0x80000000
     mov cr0, eax
- call screen_modo_estado
+
     ; inicializar tarea idle
 
     ; inicializar todas las tsss
 
     ; inicializar entradas de la gdt de las tsss
+    call tss_inicializar
+
 
     ; inicializar el scheduler
 
@@ -111,28 +114,25 @@ mp:
     call idt_inicializar
 
 
-	call screen_modo_mapa
+call screen_modo_mapa
 
 
 	
     ; configurar controlador de interrupciones
-
-    ; cargar la tarea inicial
-
-	mov eax, 0x00100000	
-
-
 	
-	push eax
-	mov eax,1
-	push eax
-	call mmu_inicializar_dir_tarea
-	
-	
-    ; saltar a la primer tarea
 	call resetear_pic
 	call habilitar_pic
 	sti
+
+    ; cargar la tarea inicial
+	
+	mov ax, 0xB8
+	ltr ax	
+
+    ; saltar a la primer tarea recordar que debo corregir el EIP de las banderas
+	xchg bx, bx	
+	jmp 0xC0:0	
+
     ; Ciclar infinitamente (por si algo sale mal...)
 	
     mov eax, 0xFFFF
